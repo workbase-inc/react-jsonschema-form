@@ -730,6 +730,7 @@ function withExactlyOneSubschema(
     if (conditionPropertySchema) {
       const conditionSchema = {
         type: "object",
+        definitions: { definitions, ...schema.definitions },
         properties: {
           [dependencyKey]: conditionPropertySchema,
         },
