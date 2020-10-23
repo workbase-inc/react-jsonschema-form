@@ -3,9 +3,9 @@
   "version": "1.8.1",
   "description": "A simple React component capable of building HTML forms out of a JSON schema.",
   "scripts": {
-    "build:lib": "rimraf lib && cross-env NODE_ENV=production babel -d lib/ src/",
-    "build:dist": "rimraf dist && cross-env NODE_ENV=production webpack --config webpack.config.dist.js",
-    "build:playground": "rimraf build && cross-env NODE_ENV=production webpack --config webpack.config.prod.js && cp playground/index.prod.html build/index.html",
+    "build:lib": "rimraf lib && ./node_modules/.bin/cross-env NODE_ENV=production babel -d lib/ src/",
+    "build:dist": "rimraf dist && ./node_modules/.bin/cross-env NODE_ENV=production webpack --config webpack.config.dist.js",
+    "build:playground": "rimraf build && ./node_modules/.bin/cross-env NODE_ENV=production webpack --config webpack.config.prod.js && cp playground/index.prod.html build/index.html",
     "cs-check": "prettier -l $npm_package_prettierOptions \"{playground,src,test}/**/*.js\"",
     "cs-format": "prettier --jsx-bracket-same-line --trailing-comma es5 --use-tabs false --semi --tab-width 2 \"{playground,src,test}/**/*.js\" --write",
     "dist": "npm run build:lib && npm run build:dist",
@@ -16,10 +16,10 @@
     "publish-to-npm": "npm run dist && npm publish",
     "preversion": "npm run build:playground && npm run dist && npm run cs-check && npm run lint",
     "start": "node devServer.js",
-    "tdd": "cross-env NODE_ENV=test mocha --require @babel/register --watch --require ./test/setup-jsdom.js test/**/*_test.js",
-    "test": "cross-env NODE_ENV=test mocha --require @babel/register --require ./test/setup-jsdom.js test/**/*_test.js",
-    "test-coverage": "cross-env NODE_ENV=test nyc --reporter=lcov mocha --require @babel/register --require ./test/setup-jsdom.js test/**/*_test.js",
-    "test-debug": "cross-env NODE_ENV=test mocha --require @babel/register --require ./test/setup-jsdom.js --debug-brk --inspect test/Form_test.js"
+    "tdd": "./node_modules/.bin/cross-env NODE_ENV=test mocha --require @babel/register --watch --require ./test/setup-jsdom.js test/**/*_test.js",
+    "test": "./node_modules/.bin/cross-env NODE_ENV=test mocha --require @babel/register --require ./test/setup-jsdom.js test/**/*_test.js",
+    "test-coverage": "./node_modules/.bin/cross-env NODE_ENV=test nyc --reporter=lcov mocha --require @babel/register --require ./test/setup-jsdom.js test/**/*_test.js",
+    "test-debug": "./node_modules/.bin/cross-env NODE_ENV=test mocha --require @babel/register --require ./test/setup-jsdom.js --debug-brk --inspect test/Form_test.js"
   },
   "prettierOptions": "--jsx-bracket-same-line --trailing-comma es5 --semi --tab-width 2",
   "lint-staged": {
