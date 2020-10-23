@@ -3,9 +3,9 @@
   "version": "1.8.1",
   "description": "A simple React component capable of building HTML forms out of a JSON schema.",
   "scripts": {
-    "build:lib": "rimraf lib && ./node_modules/.bin/cross-env NODE_ENV=production babel -d lib/ src/",
-    "build:dist": "rimraf dist && ./node_modules/.bin/cross-env NODE_ENV=production webpack --config webpack.config.dist.js",
-    "build:playground": "rimraf build && ./node_modules/.bin/cross-env NODE_ENV=production webpack --config webpack.config.prod.js && cp playground/index.prod.html build/index.html",
+    "build:lib": "./node_modules/.bin/rimraf lib && ./node_modules/.bin/cross-env NODE_ENV=production babel -d lib/ src/",
+    "build:dist": "./node_modules/.bin/rimraf dist && ./node_modules/.bin/cross-env NODE_ENV=production webpack --config webpack.config.dist.js",
+    "build:playground": "./node_modules/.bin/rimraf build && ./node_modules/.bin/cross-env NODE_ENV=production webpack --config webpack.config.prod.js && cp playground/index.prod.html build/index.html",
     "cs-check": "prettier -l $npm_package_prettierOptions \"{playground,src,test}/**/*.js\"",
     "cs-format": "prettier --jsx-bracket-same-line --trailing-comma es5 --use-tabs false --semi --tab-width 2 \"{playground,src,test}/**/*.js\" --write",
     "dist": "npm run build:lib && npm run build:dist",
