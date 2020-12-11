@@ -4,8 +4,6 @@ import { FieldTemplateProps } from "@rjsf/core";
 
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import Typography from "@material-ui/core/Typography";
 
 import WrapIfAdditional from "./WrapIfAdditional";
@@ -25,7 +23,13 @@ const FieldTemplate = ({
   rawHelp,
   rawDescription,
   schema,
-}: FieldTemplateProps) => {
+  }: FieldTemplateProps) => {
+
+  const helpText =
+    rawErrors && rawErrors.length > 0
+      ? rawErrors.map((error, ind) => <span key={ind}>{error}</span>)
+      : rawHelp;
+
   return (
     <WrapIfAdditional
       classNames={classNames}
@@ -47,18 +51,7 @@ const FieldTemplate = ({
             {rawDescription}
           </Typography>
         ) : null}
-        {rawErrors.length > 0 && (
-          <List dense={true} disablePadding={true}>
-            {rawErrors.map((error, i: number) => {
-              return (
-                <ListItem key={i} disableGutters={true}>
-                  <FormHelperText id={id}>{error}</FormHelperText>
-                </ListItem>
-              );
-            })}
-          </List>
-        )}
-        {rawHelp && <FormHelperText id={id}>{rawHelp}</FormHelperText>}
+        {helpText && <FormHelperText id={id}>{helpText}</FormHelperText>}
       </FormControl>
     </WrapIfAdditional>
   );
