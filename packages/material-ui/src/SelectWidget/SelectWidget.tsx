@@ -2,9 +2,13 @@ import React from "react";
 
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import FormControl from '@material-ui/core/FormControl';
 
 import { WidgetProps } from "@rjsf/core";
 import { utils } from "@rjsf/core";
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const { asNumber, guessType } = utils;
 
@@ -40,6 +44,18 @@ const processValue = (schema: any, value: any) => {
   return value;
 };
 
+const find = (array: any[], val: string) => {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].value === val) {
+      return array[i];
+    }
+  }
+};
+
+type MWidgetProps = WidgetProps & {
+  options: { [key: string]: boolean | number | string | object | null | any }
+}
+
 const SelectWidget = ({
   schema,
   id,
@@ -54,9 +70,16 @@ const SelectWidget = ({
   onChange,
   onBlur,
   onFocus,
+  placeholder,
   rawErrors = [],
-}: WidgetProps) => {
-  const { enumOptions, enumDisabled } = options;
+}: MWidgetProps & { schema: any }) => {
+  const { enumOptions, enumDisabled, autoComplete } = options;
+  const { enumImages } = schema;
+
+  const labelRef = React.useRef<HTMLLabelElement>(null);
+  const labelWidth = labelRef.current
+    ? labelRef.current.clientWidth
+    : (label || schema.title || '').length * 12;
 
   const emptyValue = multiple ? [] : "";
 
@@ -64,6 +87,13 @@ const SelectWidget = ({
     target: { value },
   }: React.ChangeEvent<{ name?: string; value: unknown }>) =>
     onChange(processValue(schema, value));
+  const _onAutoCompleteChange = (
+    _event: object,
+    value: any,
+    _reason: string
+  ) => {
+    return onChange(processValue(schema, value && value.value));
+  };
   const _onBlur = ({ target: { value } }: React.FocusEvent<HTMLInputElement>) =>
     onBlur(id, processValue(schema, value));
   const _onFocus = ({
@@ -71,35 +101,106 @@ const SelectWidget = ({
   }: React.FocusEvent<HTMLInputElement>) =>
     onFocus(id, processValue(schema, value));
 
+  let size: 'small' | 'medium' = 'medium';
+  if (options.size === 'small') {
+    size = 'small';
+  }
+  let variant: 'standard' | 'outlined' | 'filled' = 'standard';
+  if (options.variant === 'outlined') {
+    variant = 'outlined' as 'outlined';
+  }
+  if (options.variant === 'filled') {
+    variant = 'filled' as 'filled';
+  }
+
   return (
-    <TextField
-      id={id}
-      label={label || schema.title}
-      select
-      value={typeof value === "undefined" ? emptyValue : value}
+    <FormControl
+      fullWidth={true}
       required={required}
-      disabled={disabled || readonly}
-      autoFocus={autofocus}
-      error={rawErrors.length > 0}
-      onChange={_onChange}
-      onBlur={_onBlur}
-      onFocus={_onFocus}
-      InputLabelProps={{
-        shrink: true,
-      }}
-      SelectProps={{
-        multiple: typeof multiple === "undefined" ? false : multiple,
-      }}>
-      {(enumOptions as any).map(({ value, label }: any, i: number) => {
-        const disabled: any =
-          enumDisabled && (enumDisabled as any).indexOf(value) != -1;
-        return (
-          <MenuItem key={i} value={value} disabled={disabled}>
-            {label}
-          </MenuItem>
-        );
-      })}
-    </TextField>
+      error={!!rawErrors}
+      margin={'dense'}
+      variant={variant}
+      component='div'
+    >
+      {autoComplete ? (
+        <Autocomplete
+          value={
+            typeof value === 'undefined' ? emptyValue : find(enumOptions, value)
+          }
+          id={id}
+          disabled={disabled || readonly || schema.readOnly}
+          onChange={_onAutoCompleteChange}
+          options={enumOptions}
+          size={size}
+          getOptionLabel={(option: any) => option.label || ''}
+          renderInput={(params: any) => (
+            <TextField
+              {...params}
+              error={!!rawErrors}
+              autoFocus={autofocus}
+              onBlur={_onBlur}
+              onFocus={_onFocus}
+              required={required}
+              label={label || schema.title || undefined}
+              variant={variant}
+            />
+          )}
+        />
+      ) : (
+        <>
+          {' '}
+          {(label || schema.title) !== '' ? (
+            <InputLabel ref={labelRef} shrink={true} htmlFor={id}>
+              {label || schema.title}
+            </InputLabel>
+          ) : null}
+          <Select
+            multiple={typeof multiple === 'undefined' ? false : multiple}
+            value={typeof value === 'undefined' ? emptyValue : value}
+            labelWidth={labelWidth}
+            displayEmpty={!!placeholder}
+            error={!!rawErrors}
+            required={required}
+            id={id}
+            disabled={disabled || readonly || schema.readOnly}
+            autoFocus={autofocus}
+            onChange={_onChange}
+            onBlur={_onBlur}
+            onFocus={_onFocus}
+          >
+            {placeholder ? (
+              <MenuItem value={''} disabled>
+                {placeholder}
+              </MenuItem>
+            ) : null}
+            {(enumOptions as any).map(({ value, label }: any, i: number) => {
+              const disabled: any =
+                enumDisabled && (enumDisabled as any).indexOf(value) != -1;
+              return (
+                <MenuItem
+                  key={i}
+                  value={value}
+                  disabled={disabled}
+                  style={{ display: 'flex', alignItems: 'center' }}
+                >
+                  {enumImages && enumImages[i] ? (
+                    <img
+                      src={enumImages[i]}
+                      style={{
+                        width: '15px',
+                        height: '15px',
+                        marginRight: '6px',
+                      }}
+                    />
+                  ) : null}
+                  {label}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </>
+      )}
+    </FormControl>
   );
 };
 

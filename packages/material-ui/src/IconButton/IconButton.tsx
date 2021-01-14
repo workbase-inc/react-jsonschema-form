@@ -1,11 +1,12 @@
 import React from "react";
 
-import Button from "@material-ui/core/Button";
+import { default as MUIIconButton } from '@material-ui/core/IconButton';
 import Add from "@material-ui/icons/Add";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Remove from "@material-ui/icons/Remove";
 import { IconButtonProps as MuiIconButtonProps } from "@material-ui/core/IconButton";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const mappings: any = {
   remove: <Remove />,
@@ -16,14 +17,19 @@ const mappings: any = {
 
 type IconButtonProps = MuiIconButtonProps & {
   icon: string;
+  tooltip?: string;
 };
 
 const IconButton = (props: IconButtonProps) => {
-  const { icon, className, ...otherProps } = props;
+  const { icon, className, tooltip, ...otherProps } = props;
   return (
-    <Button {...otherProps} size="small">
+    tooltip ? <Tooltip title={tooltip}>
+      <MUIIconButton {...otherProps} size="small">
+        {mappings[icon]}
+      </MUIIconButton>
+    </Tooltip> : <MUIIconButton {...otherProps} size="small">
       {mappings[icon]}
-    </Button>
+    </MUIIconButton>
   );
 };
 

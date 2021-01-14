@@ -55,12 +55,17 @@ const CheckboxesWidget = ({
     target: { value },
   }: React.FocusEvent<HTMLButtonElement>) => onFocus(id, value);
 
+  let labelPlacement: 'start' | 'end' | 'top' | 'bottom' = 'end';
+  if (options.labelPlacement === 'start') {
+    labelPlacement = 'start';
+  }
+
   return (
     <>
       <FormLabel required={required} htmlFor={id}>
         {label || schema.title}
       </FormLabel>
-      <FormGroup>
+      <FormGroup row={!!inline}>
         {(enumOptions as any).map((option: any, index: number) => {
           const checked = value.indexOf(option.value) !== -1;
           const itemDisabled =
@@ -76,17 +81,12 @@ const CheckboxesWidget = ({
               onFocus={_onFocus}
             />
           );
-          return inline ? (
+          return (
             <FormControlLabel
               control={checkbox}
               key={index}
               label={option.label}
-            />
-          ) : (
-            <FormControlLabel
-              control={checkbox}
-              key={index}
-              label={option.label}
+              labelPlacement={labelPlacement}
             />
           );
         })}
