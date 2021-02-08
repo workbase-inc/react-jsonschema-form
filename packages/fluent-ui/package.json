@@ -1,6 +1,6 @@
 {
   "name": "@workbase/rjsf-fluent-ui",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "private": true,
   "main": "dist/index.js",
   "module": "dist/fluent-ui.esm.js",

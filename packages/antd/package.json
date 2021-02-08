@@ -1,6 +1,6 @@
 {
   "name": "@workbase/rjsf-antd",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "private": true,
   "description": "Ant Design theme, fields and widgets for react-jsonschema-form",
   "main": "dist/cjs/index.js",

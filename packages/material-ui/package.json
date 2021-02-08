@@ -1,6 +1,6 @@
 {
   "name": "@workbase/rjsf-material-ui",
-  "version": "2.4.0",
+  "version": "2.3.1",
   "private": true,
   "main": "dist/index.js",
   "module": "dist/material-ui.esm.js",
