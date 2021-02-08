@@ -1,6 +1,7 @@
 {
-  "name": "@rjsf/bootstrap-4",
+  "name": "@workbase/rjsf-bootstrap-4",
   "version": "2.3.0",
+  "private": true,
   "main": "dist/index.js",
   "module": "dist/bootstrap-4.esm.js",
   "typings": "dist/index.d.ts",
